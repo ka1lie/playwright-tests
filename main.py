@@ -1,10 +1,14 @@
 from playwright.sync_api import sync_playwright
 from datetime import datetime
+import os
+import requests
+from dotenv import load_dotenv
 
 datetime = datetime.now()
-now = datetime.strftime('%m-%d-%Y-%H-%M-%S')
-
 counter = 0
+
+# импортируем переменные из dotenv
+load_dotenv()
 
 def sync_work():
     # открыть соединение
@@ -20,6 +24,9 @@ def sync_work():
         # декларируеми функцию создания скриншотов
         def take_screenshot():
             global counter
+            global datetime
+            datetime = datetime.now()
+            now = datetime.strftime('%m-%d-%Y-%H-%M-%S')
             page.screenshot(path='./screenshots/test-' + str(now) + '-' + str(counter) + '.png')
             counter = counter + 1
         take_screenshot()
@@ -38,8 +45,12 @@ class APIResult():
     try:
         sync_work()
         if True:
-            print("All Works!")
+            print("All Works in console!")
+            data = {"status": "success"}
+            response = requests.post(os.getenv('URL'), json=data)
+            print("Status Code", response.status_code)
+            print("JSON Response ", response.json())
     except (RuntimeError, TypeError, NameError):
         pass
 
-result = APIResult()
+#result = APIResult()
