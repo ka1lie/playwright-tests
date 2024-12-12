@@ -14,9 +14,11 @@ def sync_work():
     # открыть соединение
     with sync_playwright() as p:
         # инициализация браузера (с открытием браузера и задержкой в 10 секунд)
-        browser = p.chromium.launch(headless=False, slow_mo=1000)
+        browser = p.chromium.launch(headless=True, slow_mo=1000)
+        # установить локаль на ru
+        context = browser.new_context(locale="ru-RU")
         # инициализация страницы
-        page = browser.new_page()
+        page = context.new_page()
         # переход по url адресу:
         page.goto('https://google.com/')
         # нажать на кнопку
@@ -46,7 +48,7 @@ class APIResult():
         sync_work()
         if True:
             print("All Works in console!")
-            data = {"status": "success"}
+            data = [{"status": "success"}]
             response = requests.post(os.getenv('URL'), json=data)
             print("Status Code", response.status_code)
             print("JSON Response ", response.json())
