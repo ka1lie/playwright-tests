@@ -40,19 +40,19 @@ def sync_work():
         browser.close()
 
 
-# сделал отдельную функцию result потому что планирую ее отправлять на web-server чтобы проверять что у нас
-# все гуд по API
+# отправка статуса на веб-сервер
 
 class APIResult():
     try:
         sync_work()
         if True:
-            print("All Works in console!")
+            print("All Works!")
             data = [{"status": "success"}]
             response = requests.post(os.getenv('URL'), json=data)
             print("Status Code", response.status_code)
             print("JSON Response ", response.json())
     except (RuntimeError, TypeError, NameError):
-        pass
+            data = [{"status": "check failed"}]
+            response = requests.post(os.getenv('URL'), json=data)
+            print("Check failed!")
 
-#result = APIResult()
