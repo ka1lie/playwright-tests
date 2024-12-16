@@ -16,14 +16,12 @@ def sync_work():
     with sync_playwright() as p:
         # инициализация браузера (с открытием браузера и задержкой в 10 секунд)
         browser = p.chromium.launch(headless=True, slow_mo=1000)
-        # установить локаль на ru
+        # установить локаль на en
         context = browser.new_context(locale="en-EN")
         # инициализация страницы
         page = context.new_page()
         # переход по url адресу:
         page.goto('http://grafana.ka1lie.online/login')
-        # нажать на кнопку
-        #page.get_by_role("button", name="Принять все").click()
         # декларируеми функцию создания скриншотов
         def take_screenshot():
             global counter
@@ -34,23 +32,25 @@ def sync_work():
             counter = counter + 1
         take_screenshot()
 
+        # декларируем функцию расшифрования паролей которые мы надежно спрятали
         def password_decryption():
-            encPassword = bytes(open("./creds/test", "r").read(), "")
-            key = open("./creds/key", "r").read()
-            print(encPassword)
-            print(key) 
-
-
+            # в переменной encPassword нужно будет прописывать путь до пароля
+            # потом стоит делать одно название для credential и python script
+            encPassword = open("./creds/test", "rb").read()
+            key = open("./creds/key", "rb").read() 
             fernet = Fernet(key)
+            global decPassword
             decPassword = fernet.decrypt(encPassword).decode()
-            print("decrypted string: ", str(decPassword))
 
         password_decryption()
 
         page.get_by_placeholder("email or username").fill("admin")
-        #page.get_by_placeholder("password").fill(password_decryption())
+        take_screenshot() 
+        # заполняем наш зашифрованный пароль в селектор 
+        page.get_by_placeholder("password").fill(decPassword)
         take_screenshot()
-        page.get_by_text("Log in").click()        
+        page.get_by_text("Log in").click()
+        take_screenshot()        
 
         # тут мы ожидаем что селектор прогрузится
         page.wait_for_selector('text=Welcome to Grafana')
