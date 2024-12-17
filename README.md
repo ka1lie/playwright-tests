@@ -1,6 +1,6 @@
 Currently created for tests
 
-Main task is do some synthetic test, send the result via API and show it by web page with json-like data (success or not)
+Main task is do some synthetic test in web site, do some things like clicking on buttons, filling the forms, secure auth, send the result via API and show it by web page with json-likes data (success or not)
 
 How to:
   1. Create ./creds folder
