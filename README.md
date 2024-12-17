@@ -3,12 +3,14 @@ Currently created for tests
 Main task is do some synthetic test in web site, do some things like clicking on buttons, filling the forms, secure auth, send the result via API and show it by web page with json-likes data (success or not)
 
 How to:
-  1. Create ./creds folder
-  2. Run generate-key.py ONLY ONE TIME!
-  3. Run password-encryption.py and encrypt your password for auth into web site
-  4. Run web.py for receive check 
-  4. Use the main-secure-auth.py with fill into script your URL and credential filename
-  5. Enjoy the result of your check
+  1. pip install -r requirements.txt
+  2. playwright install
+  3. Create ./creds folder
+  4. Run generate-key.py ONLY ONE TIME!
+  5. Run password-encryption.py and encrypt your password for auth into web site
+  6. Run web.py for starting web-server and receive checkers results
+  7. Use the main-secure-auth.py with fill into script your URL and credential filename
+  8. Enjoy the result of your check
 
 
 TODO:
