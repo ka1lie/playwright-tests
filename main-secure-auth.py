@@ -68,11 +68,11 @@ class APIResult():
         if True:
             print("All Works!")
             data = [{"status": "success"}]
-            response = requests.post(os.getenv('URL'), json=data)
+            response = requests.post(os.getenv('URL') + "test", json=data)
             print("Status Code", response.status_code)
             print("JSON Response ", response.json())
     except:
             data = [{"status": "check failed"}]
-            response = requests.post(os.getenv('URL'), json=data)
+            response = requests.post(os.getenv('URL') + "test", json=data)
             print("Check failed!")
 
