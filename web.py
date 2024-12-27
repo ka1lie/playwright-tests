@@ -8,7 +8,8 @@ import os
 # импортируем переменные из dotenv
 load_dotenv()
 
-checker_status = [{"status": "N/A"}]
+checker_status_default = [{"status": "N/A"}]
+checker_status_test = [{"status": "N/A"}]
 
 
 class _RequestHandler(BaseHTTPRequestHandler):
@@ -21,17 +22,34 @@ class _RequestHandler(BaseHTTPRequestHandler):
         self.end_headers()
 
     def do_GET(self):
-        self._set_headers()
-        self.wfile.write(json.dumps(checker_status).encode('utf-8'))
+        if self.path == "/":
+            self._set_headers()
+            self.wfile.write(json.dumps(checker_status_default).encode('utf-8'))
+        if self.path == "/test":
+            self._set_headers()
+            self.wfile.write(json.dumps(checker_status_test).encode('utf-8'))
+        else:
+            self.send_response(404)
 
     def do_POST(self):
-        global checker_status
-        checker_status = []
-        length = int(self.headers.get('content-length'))
-        message = json.loads(self.rfile.read(length))
-        checker_status.append(message)
-        self._set_headers()
-        self.wfile.write(json.dumps({'success': True}).encode('utf-8'))
+        global checker_status_default
+        global checker_status_test
+        if self.path == "/":
+            checker_status_default = []
+            length = int(self.headers.get('content-length'))
+            message = json.loads(self.rfile.read(length))
+            checker_status_default.append(message)
+            self._set_headers()
+            self.wfile.write(json.dumps({'success': True}).encode('utf-8'))
+        if self.path == "/test":
+            checker_status_test = []
+            length = int(self.headers.get('content-length'))
+            message = json.loads(self.rfile.read(length))
+            checker_status_test.append(message)
+            self._set_headers()
+            self.wfile.write(json.dumps({'success': True}).encode('utf-8'))
+        else:
+            self.send_response(400)
 
     def do_OPTIONS(self):
         # Send allow-origin header for preflight POST XHRs.
