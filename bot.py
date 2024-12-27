@@ -1,5 +1,6 @@
 import sqlite3
 import os
+import requests
 from dotenv import load_dotenv
 from telegram import Update, KeyboardButton, ReplyKeyboardMarkup
 from telegram.ext import Updater, CommandHandler, MessageHandler, Filters, CallbackContext
@@ -37,6 +38,37 @@ def store_user_data(telegram_id, username, phone_number, is_authorized):
     ''', (telegram_id, username, phone_number, is_authorized))
     conn.commit()
     conn.close()
+
+
+# Function to check if the external service returns the expected JSON data
+def check_external_service():
+    url = os.getenv('URL')  # Replace with your actual URL
+
+    try:
+        response = requests.get(url)
+        # If the response is successful and contains JSON
+        if response.status_code == 200:
+            data = response.json()  # Parse the JSON response
+
+            # Define the expected JSON structure (Example)
+            expected_data = {
+                "status": "success",
+            }
+
+            # Compare the actual data with the expected values
+            if data.get("status") == expected_data["status"]:
+                logger.info("External service returned expected data.")
+                return True
+            else:
+                logger.warning(f"External service returned unexpected data: {data}")
+                return False
+        else:
+            logger.error(f"Failed to fetch data. Status code: {response.status_code}")
+            return False
+    except requests.RequestException as e:
+        logger.error(f"Request failed: {e}")
+        return False
+
 
 # Start command handler
 def start(update: Update, context: CallbackContext):
@@ -88,6 +120,24 @@ def handle_contact(update: Update, context: CallbackContext):
 
     update.message.reply_text(f"Thank you! Your username: {username}, Phone number: {phone_number} have been saved.")
 
+
+async def notify_authorized_users():
+    if not check_external_service():
+        conn = sqlite3.connect('/root/sqlite3/telegram.db')
+        cursor = conn.cursor()
+        cursor.execute("SELECT telegram_id FROM users WHERE authorized = 1")  # Get all authorized users
+        authorized_users = cursor.fetchall()
+        conn.close()
+
+        # Notify all authorized users about the unexpected service data
+        for user_id, in authorized_users:
+            try:
+                bot.send_message(user_id, "Alert: The external service returned unexpected data!")
+#                logger.info(f"Notified user {user_id} about the unexpected data.")
+            except Exception as e:
+                print(f"Failed to send notification to {user_id}: {e}")
+
+
 # Main function to run the bot
 def main():
     # Initialize the bot with your token
@@ -101,6 +151,8 @@ def main():
     dp.add_handler(CommandHandler("start", start))
     dp.add_handler(MessageHandler(Filters.text & ~Filters.command, handle_message))
     dp.add_handler(MessageHandler(Filters.contact, handle_contact))
+
+    notify_authorized_users()
 
     # Start the bot
     updater.start_polling()
