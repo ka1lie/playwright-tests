@@ -1,0 +1,20 @@
+{
+    "browser": "chromium",
+    "headless": "True",
+    "start_url": "https://portainer.ka1lie.online/",
+    "slow_mo": "10000",
+    "auth": 
+    [
+        {  
+        "login": "admin", 
+        "encrypted_password": "password"
+        }
+    ],
+    "steps": 
+    [
+        {
+        "goto_url": "",
+        "button": ""
+        }
+    ]
+}
