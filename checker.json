@@ -1,13 +1,16 @@
 {
     "browser": "chromium",
     "headless": "True",
-    "start_url": "https://portainer.ka1lie.online/",
+    "start_url": "https://google.com/",
     "slow_mo": "10000",
+    "locale": "ru-RU",
     "auth": 
     [
         {  
         "login": "admin", 
-        "encrypted_password": "password"
+        "encrypted_password": "password",
+        "login_selector": "",
+        "password_selector": ""
         }
     ],
     "steps": 
