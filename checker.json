@@ -8,7 +8,7 @@
     [
         {  
         "login": "admin", 
-        "encrypted_password": "password",
+        "encrypted_password": "b'gAAAAABnm3Pn2jTGRXFhQQWOLkYDNRKRN2_11Kk7XxsYcL9gZzOKuKLFOlamdA0oc72sRYhNMxM11wb11pIdKa8J6bdZxBzDVA=='",
         "login_selector": "text=Login",
         "password_selector": ""
         }
