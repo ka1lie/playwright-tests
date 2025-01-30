@@ -3,6 +3,7 @@ from datetime import datetime
 import os
 import requests
 from dotenv import load_dotenv
+from cryptography.fernet import Fernet
 import json
 
 datetime = datetime.now()
@@ -54,14 +55,32 @@ def sync_work():
              password = auth_info['encrypted_password']
              login_selector = auth_info['login_selector']
              password_selector = auth_info['password_selector']
-             
+
+             if auth_info['encrypted_password']:
+                print("Test MESSAGE")  
+                def password_decryption():
+                    key = open("./creds/key", "rb").read() 
+                    fernet = Fernet(key)
+                    print(fernet)
+                    global decPassword
+                    decPassword = fernet.decrypt(password).decode()
+                    print(decPassword)
+                password_decryption()    
+
              if login_selector.startswith('text='):
-                  print(login_selector.replace('text=', ''))
-                  #page.get_by_text(login_selector)
+       #           print(login_selector.replace('text=', ''))
+                  page.get_by_text(login_selector.replace('text=', '')).fill(login)
              if login_selector.startswith('label='):
-                  page.get_by_label(login_selector)
+                  page.get_by_label(login_selector.replace('label=', '')).fill(login)
              if login_selector.startswith('placeholder='):
-                  page.get_by_placeholder(login_selector)
+                  page.get_by_placeholder(login_selector.replace('placeholder=', '')).fill(login)
+
+             if password_selector.startswith('text='):
+                  page.get_by_text(password_selector.replace('text=', '')).fill(password)
+             if password_selector.startswith('label='):
+                  page.get_by_label(password_selector.replace('label=', '')).fill(password)
+             if password_selector.startswith('placeholder='):
+                  page.get_by_placeholder(password_selector.replace('placeholder=', '')).fill(password)
                 
 
 # необходимые конструкции - placeholder, text, button, fill, click
