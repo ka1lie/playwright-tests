@@ -9,15 +9,16 @@
         {  
         "login": "admin", 
         "encrypted_password": "password",
-        "login_selector": "",
+        "login_selector": "text=Login",
         "password_selector": ""
         }
     ],
     "steps": 
     [
         {
-        "goto_url": "",
-        "button": ""
+        "goto_url": "123",
+        "button": "456",
+        "fill_selector": "789"
         }
     ]
 }
