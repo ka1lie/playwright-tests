@@ -47,13 +47,33 @@ def sync_work():
         take_screenshot()
 
         if not data['auth']:
-             print("Auth is empty")
+             print("Auth is empty, skipping...")
         else:
              auth_info = data['auth'][0]  
              login = auth_info['login']
              password = auth_info['encrypted_password']
-             print(login)
-             print(password)
+             login_selector = auth_info['login_selector']
+             password_selector = auth_info['password_selector']
+             
+             if login_selector.startswith('text='):
+                  print(login_selector.replace('text=', ''))
+                  #page.get_by_text(login_selector)
+             if login_selector.startswith('label='):
+                  page.get_by_label(login_selector)
+             if login_selector.startswith('placeholder='):
+                  page.get_by_placeholder(login_selector)
+                
+
+# необходимые конструкции - placeholder, text, button, fill, click
+
+        steps = data['steps'][0]
+
+        for i in range(len(data['steps'][0])):
+#             if 
+#             print(data['steps'][1])
+             print(i)
+#             print(login)
+#             print(password)
 
 
         browser.close()
