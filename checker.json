@@ -1,16 +1,17 @@
 {
     "browser": "chromium",
     "headless": "True",
-    "start_url": "https://google.com/",
+    "start_url": "http://grafana.ka1lie.online/login",
     "slow_mo": "10000",
-    "locale": "ru-RU",
+    "locale": "en-EN",
     "auth": 
     [
         {  
         "login": "admin", 
-        "encrypted_password": "b'gAAAAABnm3Pn2jTGRXFhQQWOLkYDNRKRN2_11Kk7XxsYcL9gZzOKuKLFOlamdA0oc72sRYhNMxM11wb11pIdKa8J6bdZxBzDVA=='",
-        "login_selector": "text=Login",
-        "password_selector": ""
+        "encrypted_password": "gAAAAABnogpYxwhYn3N_p5nhOYC8v9QInBQANkEFhv-bCnl0e5_Uci7BjURQB-_HU_-H_ftYTXixTTiwUqN97-YDa56kJkHAww==",
+        "login_selector": "placeholder=email or username",
+        "password_selector": "placeholder=password",
+        "login_button": "text=Log in"
         }
     ],
     "steps": 
