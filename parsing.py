@@ -50,40 +50,73 @@ def sync_work():
         if not data['auth']:
              print("Auth is empty, skipping...")
         else:
+             print("Start reading auth info...")  
              auth_info = data['auth'][0]  
              login = auth_info['login']
              password = auth_info['encrypted_password']
              login_selector = auth_info['login_selector']
              password_selector = auth_info['password_selector']
+             login_button = auth_info['login_button']
 
              if auth_info['encrypted_password']:
-                print("Test MESSAGE")  
                 def password_decryption():
                     key = open("./creds/key", "rb").read() 
                     fernet = Fernet(key)
-                    print(fernet)
                     global decPassword
-                    decPassword = fernet.decrypt(password).decode()
-                    print(decPassword)
+                    decPassword = fernet.decrypt(bytes(password, 'utf-8')).decode()
                 password_decryption()    
 
-             if login_selector.startswith('text='):
-       #           print(login_selector.replace('text=', ''))
-                  page.get_by_text(login_selector.replace('text=', '')).fill(login)
-             if login_selector.startswith('label='):
-                  page.get_by_label(login_selector.replace('label=', '')).fill(login)
-             if login_selector.startswith('placeholder='):
-                  page.get_by_placeholder(login_selector.replace('placeholder=', '')).fill(login)
 
-             if password_selector.startswith('text='):
-                  page.get_by_text(password_selector.replace('text=', '')).fill(password)
-             if password_selector.startswith('label='):
-                  page.get_by_label(password_selector.replace('label=', '')).fill(password)
-             if password_selector.startswith('placeholder='):
-                  page.get_by_placeholder(password_selector.replace('placeholder=', '')).fill(password)
+             def define_fill(page, selector, value):
+                    if selector.startswith('text='):
+                        page.get_by_text(selector.replace('text=', '')).fill(value)
+                    elif selector.startswith('label='):
+                        page.get_by_label(selector.replace('label=', '')).fill(value)
+                    elif selector.startswith('placeholder='):
+                        page.get_by_placeholder(selector.replace('placeholder=', '')).fill(value)
+
+             def define_click(page, selector):
+                    if selector.startswith('text='):
+                        page.get_by_text(selector.replace('text=', '')).clicl()
+                    elif selector.startswith('label='):
+                        page.get_by_label(selector.replace('label=', '')).click()
+                    elif selector.startswith('placeholder='):
+                        page.get_by_placeholder(selector.replace('placeholder=', '')).click()
+
+             def fill_login_credentials(page, login_selector, login, password_selector, password, login_button):
+                    # Fill login field
+                    define_fill(page, login_selector, login)
+                    print("Login is filled")
+                    
+                    # Fill password field
+                    define_fill(page, password_selector, password)
+                    print("Password is filled")
+
+                    define_click(page, login_button)
+                    print("Button is clicked")
+
+             fill_login_credentials()
+             take_screenshot()
+
+#             if login_selector.startswith('text='):
+       #           print(login_selector.replace('text=', ''))
+#                  page.get_by_text(login_selector.replace('text=', '')).fill(login)
+#             if login_selector.startswith('label='):
+#                  page.get_by_label(login_selector.replace('label=', '')).fill(login)
+#            if login_selector.startswith('placeholder='):
+#                  page.get_by_placeholder(login_selector.replace('placeholder=', '')).fill(login)
+
+#             if password_selector.startswith('text='):
+#                  page.get_by_text(password_selector.replace('text=', '')).fill(password)
+#             if password_selector.startswith('label='):
+#                  page.get_by_label(password_selector.replace('label=', '')).fill(password)
+#             if password_selector.startswith('placeholder='):
+#                  page.get_by_placeholder(password_selector.replace('placeholder=', '')).fill(password)
+
+            
                 
 
-# необходимые конструкции - placeholder, text, button, fill, click
+# необходимые конструкции - placeholder, text, button, label, fill, click
 
         steps = data['steps'][0]
 
