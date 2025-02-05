@@ -77,44 +77,29 @@ def sync_work():
 
              def define_click(page, selector):
                     if selector.startswith('text='):
-                        page.get_by_text(selector.replace('text=', '')).clicl()
+                        page.get_by_text(selector.replace('text=', '')).click()
                     elif selector.startswith('label='):
                         page.get_by_label(selector.replace('label=', '')).click()
                     elif selector.startswith('placeholder='):
                         page.get_by_placeholder(selector.replace('placeholder=', '')).click()
 
-             def fill_login_credentials(page, login_selector, login, password_selector, password, login_button):
+             def fill_login_credentials(page, login_selector, login, password_selector, decPassword, login_button):
                     # Fill login field
                     define_fill(page, login_selector, login)
                     print("Login is filled")
                     
                     # Fill password field
-                    define_fill(page, password_selector, password)
+                    define_fill(page, password_selector, decPassword)
                     print("Password is filled")
 
+                    take_screenshot()
                     define_click(page, login_button)
                     print("Button is clicked")
 
-             fill_login_credentials()
-             take_screenshot()
-
-#             if login_selector.startswith('text='):
-       #           print(login_selector.replace('text=', ''))
-#                  page.get_by_text(login_selector.replace('text=', '')).fill(login)
-#             if login_selector.startswith('label='):
-#                  page.get_by_label(login_selector.replace('label=', '')).fill(login)
-#            if login_selector.startswith('placeholder='):
-#                  page.get_by_placeholder(login_selector.replace('placeholder=', '')).fill(login)
-
-#             if password_selector.startswith('text='):
-#                  page.get_by_text(password_selector.replace('text=', '')).fill(password)
-#             if password_selector.startswith('label='):
-#                  page.get_by_label(password_selector.replace('label=', '')).fill(password)
-#             if password_selector.startswith('placeholder='):
-#                  page.get_by_placeholder(password_selector.replace('placeholder=', '')).fill(password)
-
-            
-                
+             fill_login_credentials(page, login_selector, login, password_selector, decPassword, login_button)
+             
+  
+        take_screenshot()        
 
 # необходимые конструкции - placeholder, text, button, label, fill, click
 
@@ -130,6 +115,7 @@ def sync_work():
 
         browser.close()
     
+
 
 class APIResult():
     try:
