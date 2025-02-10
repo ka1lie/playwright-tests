@@ -104,13 +104,16 @@ def sync_work():
 # необходимые конструкции - placeholder, text, button, label, fill, click
 
         steps = data['steps'][0]
+        
+        for key, value in steps.items():
+             print(f"{key}: {value}")
+             if key == "goto_url":
+                  page.goto(value)
+             elif key == "fill_selector":
+                  define_fill(page, selector, value)
+#             elif key == "fill_selector":
+#                  define_fill(page, )
 
-        for i in range(len(data['steps'][0])):
-#             if 
-#             print(data['steps'][1])
-             print(i)
-#             print(login)
-#             print(password)
 
 
         browser.close()
